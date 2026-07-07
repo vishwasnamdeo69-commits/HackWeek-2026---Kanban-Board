@@ -14,8 +14,16 @@
   <header class="app-header">
     <div class="app-header__inner">
       <div class="app-header__brand">
-        <span class="app-header__logo" aria-hidden="true"></span>
-        <h1 class="app-header__title">TaskFlow</h1>
+        <span class="app-header__logo" aria-hidden="true">
+          <svg class="app-header__logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="7" height="18" rx="1.5"/>
+            <rect x="14" y="3" width="7" height="12" rx="1.5"/>
+          </svg>
+        </span>
+        <div class="app-header__identity">
+          <h1 class="app-header__title">TaskFlow</h1>
+          <p class="app-header__subtitle">Kanban workspace</p>
+        </div>
       </div>
     </div>
   </header>
@@ -28,7 +36,10 @@
         </header>
         <div class="column__cards" aria-label="To Do cards"></div>
         <button class="column__add-btn" type="button" aria-label="Add card to To Do column">
-          <span class="column__add-icon" aria-hidden="true">+</span>
+          <svg class="column__add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
           Add card
         </button>
       </article>
@@ -39,7 +50,10 @@
         </header>
         <div class="column__cards" aria-label="In Progress cards"></div>
         <button class="column__add-btn" type="button" aria-label="Add card to In Progress column">
-          <span class="column__add-icon" aria-hidden="true">+</span>
+          <svg class="column__add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
           Add card
         </button>
       </article>
@@ -50,7 +64,10 @@
         </header>
         <div class="column__cards" aria-label="Done cards"></div>
         <button class="column__add-btn" type="button" aria-label="Add card to Done column">
-          <span class="column__add-icon" aria-hidden="true">+</span>
+          <svg class="column__add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
           Add card
         </button>
       </article>

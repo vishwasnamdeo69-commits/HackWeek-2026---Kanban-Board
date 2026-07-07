@@ -1,15 +1,32 @@
 /**
  * dragDrop.js
- * Will contain drag-and-drop logic using the HTML Drag & Drop API.
- * Phase 3+: Isolated from rendering and storage concerns.
+ * Drag-and-drop logic using the HTML Drag & Drop API.
+ * Isolated from rendering and storage concerns.
  */
+
+/** @type {string|null} */
+let draggedTaskId = null;
 
 /**
  * Initializes drag-and-drop behavior on the board.
  * @param {HTMLElement} boardElement - The root board container.
+ * @param {{ onMove: (taskId: string, newStatus: string) => void }} callbacks
  */
-export function initDragDrop(boardElement) {
-  // Implementation planned for Phase 3.
+export function initDragDrop(boardElement, { onMove }) {
+  if (!boardElement || typeof onMove !== 'function') {
+    return;
+  }
+
+  boardElement.addEventListener('dragstart', handleDragStart);
+  boardElement.addEventListener('dragend', handleDragEnd);
+
+  const dropZones = boardElement.querySelectorAll('.column__cards');
+
+  dropZones.forEach((zone) => {
+    zone.addEventListener('dragover', handleDragOver);
+    zone.addEventListener('dragleave', handleDragLeave);
+    zone.addEventListener('drop', (event) => handleDrop(event, onMove));
+  });
 }
 
 /**
@@ -17,13 +34,87 @@ export function initDragDrop(boardElement) {
  * @param {DragEvent} event
  */
 export function handleDragStart(event) {
-  // Implementation planned for Phase 3.
+  const card = event.target.closest('.card');
+
+  if (!card) {
+    return;
+  }
+
+  draggedTaskId = card.dataset.id;
+  event.dataTransfer.effectAllowed = 'move';
+  event.dataTransfer.setData('text/plain', draggedTaskId);
+
+  requestAnimationFrame(() => {
+    card.classList.add('card--dragging');
+  });
+}
+
+/**
+ * Cleans up drag state when a drag operation ends.
+ * @param {DragEvent} event
+ */
+function handleDragEnd(event) {
+  const card = event.target.closest('.card');
+
+  card?.classList.remove('card--dragging');
+  clearAllDragOver();
+  draggedTaskId = null;
+}
+
+/**
+ * Allows dropping and highlights the target column.
+ * @param {DragEvent} event
+ */
+function handleDragOver(event) {
+  event.preventDefault();
+  event.dataTransfer.dropEffect = 'move';
+  event.currentTarget.classList.add('column__cards--drag-over');
+}
+
+/**
+ * Removes drop highlight when the pointer leaves the column.
+ * @param {DragEvent} event
+ */
+function handleDragLeave(event) {
+  const zone = event.currentTarget;
+
+  if (!zone.contains(event.relatedTarget)) {
+    zone.classList.remove('column__cards--drag-over');
+  }
 }
 
 /**
  * Handles dropping a card into a target column.
  * @param {DragEvent} event
+ * @param {(taskId: string, newStatus: string) => void} onMove
  */
-export function handleDrop(event) {
-  // Implementation planned for Phase 3.
+export function handleDrop(event, onMove) {
+  event.preventDefault();
+
+  const zone = event.currentTarget;
+  zone.classList.remove('column__cards--drag-over');
+
+  const taskId = event.dataTransfer.getData('text/plain') || draggedTaskId;
+  const column = zone.closest('.column');
+  const newStatus = column?.dataset.status;
+
+  if (!taskId || !newStatus) {
+    return;
+  }
+
+  const card = document.querySelector(`.card[data-id="${taskId}"]`);
+  const currentStatus = card?.dataset.status;
+
+  if (currentStatus && currentStatus !== newStatus) {
+    onMove(taskId, newStatus);
+  }
+}
+
+/**
+ * Removes drag-over styling from all column drop zones.
+ */
+function clearAllDragOver() {
+  document.querySelectorAll('.column__cards--drag-over').forEach((zone) => {
+    zone.classList.remove('column__cards--drag-over');
+  });
 }

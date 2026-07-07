@@ -3,7 +3,8 @@
  * Responsible for board rendering, column management, and card insertion.
  */
 
-import { createCardElement, renderCards } from './card.js';
+import { appendCard, renderCards } from './card.js';
+import { initDragDrop } from './dragDrop.js';
 import { generateId, getTimestamp, $$ } from './utils.js';
 
 /** @type {Array<{id: string, title: string, status: string, createdAt: string}>} */
@@ -15,6 +16,7 @@ let tasks = [];
 export function initBoard() {
   bindAddCardListeners();
   renderBoard();
+  initDragDrop(getBoardElement(), { onMove: moveTask });
 }
 
 /**
@@ -46,6 +48,22 @@ export function getBoardElement() {
  */
 export function getTasks() {
   return [...tasks];
+}
+
+/**
+ * Moves a task to a different column and re-renders the board.
+ * @param {string} taskId
+ * @param {string} newStatus
+ */
+export function moveTask(taskId, newStatus) {
+  const task = tasks.find((item) => item.id === taskId);
+
+  if (!task || task.status === newStatus) {
+    return;
+  }
+
+  task.status = newStatus;
+  renderBoard();
 }
 
 /**
@@ -171,9 +189,8 @@ function insertTask(title, status) {
 
   const column = document.querySelector(`.column[data-status="${status}"]`);
   const container = column.querySelector('.column__cards');
-  const cardElement = createCardElement(task, { animate: true });
 
-  container.appendChild(cardElement);
+  appendCard(container, task, { animate: true });
 }
 
 /**
