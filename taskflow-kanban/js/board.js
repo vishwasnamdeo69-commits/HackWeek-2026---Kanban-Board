@@ -5,6 +5,7 @@
 
 import { appendCard, renderCards } from './card.js';
 import { initDragDrop } from './dragDrop.js';
+import { loadBoard, saveBoard } from './storage.js';
 import { generateId, getTimestamp, $$ } from './utils.js';
 
 /** @type {Array<{id: string, title: string, status: string, createdAt: string}>} */
@@ -14,6 +15,7 @@ let tasks = [];
  * Initializes the Kanban board and binds column interactions.
  */
 export function initBoard() {
+  tasks = loadBoard();
   bindAddCardListeners();
   renderBoard();
   initDragDrop(getBoardElement(), { onMove: moveTask });
@@ -64,6 +66,7 @@ export function moveTask(taskId, newStatus) {
 
   task.status = newStatus;
   renderBoard();
+  saveBoard(tasks);
 }
 
 /**
@@ -191,6 +194,7 @@ function insertTask(title, status) {
   const container = column.querySelector('.column__cards');
 
   appendCard(container, task, { animate: true });
+  saveBoard(tasks);
 }
 
 /**
