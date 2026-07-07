@@ -1,12 +1,12 @@
 /**
  * board.js
- * Responsible for board rendering, column management, and card insertion.
+ * Owns board state, coordinates modules, and handles user interactions.
  */
 
 import { appendCard, renderCards } from './card.js';
 import { initDragDrop } from './dragDrop.js';
 import { loadBoard, saveBoard } from './storage.js';
-import { generateId, getTimestamp, $$ } from './utils.js';
+import { announce, COLUMN_LABELS, generateId, getTimestamp, $, $$ } from './utils.js';
 
 /** @type {Array<{id: string, title: string, status: string, createdAt: string}>} */
 let tasks = [];
@@ -33,7 +33,29 @@ export function renderBoard() {
     const columnTasks = tasks.filter((task) => task.status === status);
 
     renderCards(container, columnTasks);
+    updateColumnMeta(column, status, columnTasks.length);
   });
+}
+
+/**
+ * Updates the column task counter and accessible labels.
+ * @param {HTMLElement} column
+ * @param {string} status
+ * @param {number} count
+ */
+function updateColumnMeta(column, status, count) {
+  const countEl = column.querySelector('.column__count');
+  const container = column.querySelector('.column__cards');
+  const label = COLUMN_LABELS[status] || status;
+  const taskWord = count === 1 ? 'task' : 'tasks';
+
+  if (countEl) {
+    countEl.textContent = `(${count})`;
+  }
+
+  if (container) {
+    container.setAttribute('aria-label', `${label} cards, ${count} ${taskWord}`);
+  }
 }
 
 /**
@@ -41,7 +63,7 @@ export function renderBoard() {
  * @returns {HTMLElement|null}
  */
 export function getBoardElement() {
-  return document.querySelector('.board');
+  return $('.board');
 }
 
 /**
@@ -64,9 +86,13 @@ export function moveTask(taskId, newStatus) {
     return;
   }
 
+  const previousLabel = COLUMN_LABELS[task.status] || task.status;
   task.status = newStatus;
   renderBoard();
   saveBoard(tasks);
+
+  const newLabel = COLUMN_LABELS[newStatus] || newStatus;
+  announce(`Moved "${task.title}" from ${previousLabel} to ${newLabel}.`);
 }
 
 /**
@@ -108,9 +134,12 @@ function openCardComposer(column) {
  */
 function buildComposer(column) {
   const status = column.dataset.status;
+  const label = COLUMN_LABELS[status] || status;
   const composer = document.createElement('div');
   composer.className = 'card-composer';
   composer.dataset.status = status;
+  composer.setAttribute('role', 'form');
+  composer.setAttribute('aria-label', `Create card in ${label}`);
 
   composer.innerHTML = `
     <textarea
@@ -190,23 +219,31 @@ function insertTask(title, status) {
 
   tasks.push(task);
 
-  const column = document.querySelector(`.column[data-status="${status}"]`);
+  const column = $(`.column[data-status="${status}"]`);
   const container = column.querySelector('.column__cards');
 
   appendCard(container, task, { animate: true });
+  updateColumnMeta(column, status, tasks.filter((item) => item.status === status).length);
   saveBoard(tasks);
+
+  const label = COLUMN_LABELS[status] || status;
+  announce(`Added "${title}" to ${label}.`);
 }
 
 /**
  * Closes the composer inside a column and restores the Add Card button.
  * @param {HTMLElement} column
  */
-function closeComposer(column) {
+function closeComposer(column, { focusOnClose = true } = {}) {
   const composer = column.querySelector('.card-composer');
   const addBtn = column.querySelector('.column__add-btn');
 
   composer?.remove();
   addBtn.hidden = false;
+
+  if (focusOnClose) {
+    addBtn.focus();
+  }
 }
 
 /**
@@ -216,7 +253,7 @@ function closeAllComposers() {
   $$('.card-composer').forEach((composer) => {
     const column = composer.closest('.column');
     if (column) {
-      closeComposer(column);
+      closeComposer(column, { focusOnClose: false });
     }
   });
 }

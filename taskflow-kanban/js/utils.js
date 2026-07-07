@@ -3,6 +3,13 @@
  * Shared utility functions used across TaskFlow modules.
  */
 
+/** @type {Record<string, string>} */
+export const COLUMN_LABELS = {
+  todo: 'To Do',
+  progress: 'In Progress',
+  done: 'Done',
+};
+
 /**
  * Generates a unique identifier for a new task.
  * @returns {string}
@@ -41,4 +48,22 @@ export function $(selector, parent = document) {
  */
 export function $$(selector, parent = document) {
   return parent.querySelectorAll(selector);
+}
+
+/**
+ * Announces a message to screen readers via the live region.
+ * @param {string} message
+ */
+export function announce(message) {
+  const liveRegion = document.getElementById('board-announcer');
+
+  if (!liveRegion) {
+    return;
+  }
+
+  liveRegion.textContent = '';
+
+  requestAnimationFrame(() => {
+    liveRegion.textContent = message;
+  });
 }

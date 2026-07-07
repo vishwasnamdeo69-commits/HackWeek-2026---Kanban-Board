@@ -1,140 +1,198 @@
 # TaskFlow
 
-A lightweight, Trello-style Kanban board built with vanilla HTML, CSS, and JavaScript. TaskFlow helps you organize work visually across three workflow stages — no backend, no frameworks, fully offline.
+A modern Kanban board inspired by Trello, built with **Vanilla HTML, CSS and JavaScript**.
+
+TaskFlow allows users to create tasks, organize them visually using drag-and-drop, and automatically saves the board using browser Local Storage so work persists across page refreshes.
 
 Built for **HackWeek 2026**.
 
 ---
 
-## Overview
+## Preview
 
-TaskFlow is a browser-based task management board that lets users create cards, drag them between columns, and persist board state using `localStorage`. This repository is structured for modular development across five phases, starting with a static UI foundation.
+### Empty Board
+
+![Empty Board](assets/screenshot-desktop1.png)
+
+### Board with Tasks
+
+![Board with Tasks](assets/screenshot-desktop2.png)
 
 ---
 
 ## Features
 
-### Current (Phase 1)
-
-- Clean, Trello-inspired responsive layout
-- Three Kanban columns: **To Do**, **In Progress**, **Done**
-- Modular JavaScript architecture with separated concerns
-- Semantic HTML and professional CSS organization
-
-### Planned
-
-| Phase | Feature |
-|-------|---------|
-| Phase 2 | Card creation with title input |
-| Phase 3 | Drag-and-drop between columns |
-| Phase 4 | `localStorage` persistence across page refreshes |
-| Phase 5 | UI polish, empty states, screenshots, and demo video |
+- ✅ Create tasks in any column
+- ✅ Drag & Drop between columns
+- ✅ Automatic Local Storage persistence
+- ✅ Responsive design
+- ✅ Accessible interface (ARIA, keyboard navigation)
+- ✅ Modern minimal UI
+- ✅ Zero dependencies
 
 ---
 
-## Folder Structure
+## Tech Stack
+
+- HTML5
+- CSS3
+- JavaScript (ES6 Modules)
+- HTML5 Drag & Drop API
+- Local Storage
+
+---
+
+## Project Structure
 
 ```
-taskflow-kanban/
+TaskFlow/
 │
-├── index.html          # Application shell and static board layout
-├── style.css           # Global styles and responsive layout
-├── script.js           # Entry point and application bootstrap
+├── assets/
+│   ├── screenshot-desktop1.png
+│   └── screenshot-desktop2.png
 │
 ├── js/
-│   ├── board.js        # Board rendering and column management
-│   ├── card.js         # Card creation and rendering
-│   ├── dragDrop.js     # Drag-and-drop interactions
-│   ├── storage.js      # localStorage read/write operations
-│   └── utils.js        # Shared helper functions
+│   ├── board.js
+│   ├── card.js
+│   ├── dragDrop.js
+│   ├── storage.js
+│   └── utils.js
 │
-├── assets/             # Images, icons, and static media
-│
+├── index.html
+├── style.css
+├── script.js
 ├── README.md
 └── LICENSE
 ```
 
 ---
 
-## Installation
+## How It Works
 
-No build step or package manager is required.
+### Create Tasks
 
-1. Clone or download this repository.
-2. Open `index.html` in a modern browser.
+Click **Add Card**, type a task title and save it.
+
+### Drag & Drop
+
+Move cards freely between:
+
+- To Do
+- In Progress
+- Done
+
+### Automatic Saving
+
+Every action is saved automatically using **Local Storage**.
+
+Refreshing the browser restores the board exactly as it was.
+
+---
+
+## Architecture
+
+TaskFlow follows a modular architecture where every module has a single responsibility.
+
+```
+script.js
+      │
+      ▼
+board.js
+ ├── card.js
+ ├── dragDrop.js
+ ├── storage.js
+ └── utils.js
+```
+
+- **board.js** manages application state.
+- **card.js** renders task cards.
+- **dragDrop.js** handles drag-and-drop interactions.
+- **storage.js** manages Local Storage.
+- **utils.js** provides reusable helper functions.
+
+---
+
+## Getting Started
+
+Clone the repository:
 
 ```bash
-# Optional: serve locally to use ES modules without file:// restrictions
+git clone YOUR_REPO_LINK
+```
+
+Open the project folder:
+
+```bash
+cd TaskFlow
+```
+
+Run a simple local server:
+
+```bash
 npx serve .
 ```
 
-Or open `index.html` directly — most modern browsers support ES modules from the file system.
+Open
+
+```
+http://localhost:3000
+```
 
 ---
 
-## Usage
+## Keyboard Shortcuts
 
-Phase 1 delivers a static board preview only. Buttons and card containers are visual placeholders; functionality arrives in Phase 2.
-
----
-
-## Roadmap
-
-- [x] **Phase 1** — Project foundation, static UI, modular architecture
-- [ ] **Phase 2** — Card creation
-- [ ] **Phase 3** — Drag & drop
-- [ ] **Phase 4** — localStorage persistence
-- [ ] **Phase 5** — Polish, documentation, demo video
+| Action | Shortcut |
+|---------|----------|
+| Save Task | Enter |
+| New Line | Shift + Enter |
+| Cancel | Escape |
 
 ---
 
-## Technologies
+## Local Storage
 
-- **HTML5** — Semantic markup
-- **CSS3** — Flexbox layout, custom properties, responsive design
-- **JavaScript (ES6+)** — ES modules, separation of concerns
-- **HTML Drag & Drop API** — Planned for Phase 3
-- **localStorage** — Planned for Phase 4
+Tasks are stored using the browser's Local Storage.
 
----
-
-## Data Model
-
-Each task will be stored as:
+Each task contains:
 
 ```json
 {
   "id": "uuid",
   "title": "Build README",
   "status": "todo",
-  "createdAt": "timestamp"
+  "createdAt": "2026-07-07T12:00:00.000Z"
 }
 ```
 
-Status values: `todo` · `progress` · `done`
+The board restores automatically every time the application loads.
 
 ---
 
-## Architecture
+## Future Improvements
 
-```
-Browser
-  ↓
-HTML (static shell)
-  ↓
-script.js (entry point)
-  ↓
-board.js → card.js
-  ↓
-dragDrop.js
-  ↓
-storage.js → localStorage
-```
+- Edit tasks
+- Delete tasks
+- Due dates
+- Labels & priorities
+- Dark mode
+- Export / Import board
+- Cloud synchronization
 
-Each module owns a single responsibility. UI rendering, interaction logic, and persistence are kept separate to keep the codebase maintainable as features are added.
+---
+
+## Demo
+
+**Repository**
+
+YOUR_REPO_LINK
+
+**Demo Video**
+
+YOUR_DEMO_VIDEO_LINK
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License.

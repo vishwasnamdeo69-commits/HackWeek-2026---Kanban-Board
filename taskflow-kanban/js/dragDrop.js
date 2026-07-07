@@ -44,6 +44,9 @@ export function handleDragStart(event) {
   event.dataTransfer.effectAllowed = 'move';
   event.dataTransfer.setData('text/plain', draggedTaskId);
 
+  card.setAttribute('aria-grabbed', 'true');
+  setDropZonesActive(true);
+
   requestAnimationFrame(() => {
     card.classList.add('card--dragging');
   });
@@ -57,7 +60,9 @@ function handleDragEnd(event) {
   const card = event.target.closest('.card');
 
   card?.classList.remove('card--dragging');
+  card?.setAttribute('aria-grabbed', 'false');
   clearAllDragOver();
+  setDropZonesActive(false);
   draggedTaskId = null;
 }
 
@@ -108,6 +113,16 @@ export function handleDrop(event, onMove) {
   if (currentStatus && currentStatus !== newStatus) {
     onMove(taskId, newStatus);
   }
+}
+
+/**
+ * Toggles drop-zone affordances while a drag is active.
+ * @param {boolean} isActive
+ */
+function setDropZonesActive(isActive) {
+  document.querySelectorAll('.column__cards').forEach((zone) => {
+    zone.setAttribute('aria-dropeffect', isActive ? 'move' : 'none');
+  });
 }
 
 /**

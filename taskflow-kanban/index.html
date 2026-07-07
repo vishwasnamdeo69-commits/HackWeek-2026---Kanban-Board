@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="TaskFlow – A Trello-style Kanban board for visual task management.">
-  <title>TaskFlow</title>
+  <meta name="description" content="TaskFlow – A modern Kanban board for visual task management. Create cards, drag between columns, and persist your work locally.">
+  <title>TaskFlow – Kanban Board</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to board</a>
+
+  <div id="board-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
   <header class="app-header">
     <div class="app-header__inner">
       <div class="app-header__brand">
@@ -28,13 +32,16 @@
     </div>
   </header>
 
-  <main class="app-main">
+  <main id="main-content" class="app-main" tabindex="-1">
     <section class="board" aria-label="Kanban board">
-      <article class="column" data-status="todo">
+      <article class="column" data-status="todo" aria-labelledby="column-title-todo">
         <header class="column__header">
-          <h2 class="column__title">To Do</h2>
+          <h2 class="column__title" id="column-title-todo">
+            <span class="column__title-text">To Do</span>
+            <span class="column__count" aria-hidden="true">(0)</span>
+          </h2>
         </header>
-        <div class="column__cards" aria-label="To Do cards"></div>
+        <div class="column__cards" role="list" aria-label="To Do cards, 0 tasks"></div>
         <button class="column__add-btn" type="button" aria-label="Add card to To Do column">
           <svg class="column__add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -44,11 +51,14 @@
         </button>
       </article>
 
-      <article class="column" data-status="progress">
+      <article class="column" data-status="progress" aria-labelledby="column-title-progress">
         <header class="column__header">
-          <h2 class="column__title">In Progress</h2>
+          <h2 class="column__title" id="column-title-progress">
+            <span class="column__title-text">In Progress</span>
+            <span class="column__count" aria-hidden="true">(0)</span>
+          </h2>
         </header>
-        <div class="column__cards" aria-label="In Progress cards"></div>
+        <div class="column__cards" role="list" aria-label="In Progress cards, 0 tasks"></div>
         <button class="column__add-btn" type="button" aria-label="Add card to In Progress column">
           <svg class="column__add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="12" y1="5" x2="12" y2="19"/>
@@ -58,11 +68,14 @@
         </button>
       </article>
 
-      <article class="column" data-status="done">
+      <article class="column" data-status="done" aria-labelledby="column-title-done">
         <header class="column__header">
-          <h2 class="column__title">Done</h2>
+          <h2 class="column__title" id="column-title-done">
+            <span class="column__title-text">Done</span>
+            <span class="column__count" aria-hidden="true">(0)</span>
+          </h2>
         </header>
-        <div class="column__cards" aria-label="Done cards"></div>
+        <div class="column__cards" role="list" aria-label="Done cards, 0 tasks"></div>
         <button class="column__add-btn" type="button" aria-label="Add card to Done column">
           <svg class="column__add-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="12" y1="5" x2="12" y2="19"/>

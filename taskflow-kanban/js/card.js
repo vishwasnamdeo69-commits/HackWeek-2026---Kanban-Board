@@ -18,7 +18,10 @@ export function createCardElement(task, { animate = false } = {}) {
   card.dataset.id = task.id;
   card.dataset.status = task.status;
   card.setAttribute('draggable', 'true');
-  card.setAttribute('aria-label', `Task: ${task.title}`);
+  card.setAttribute('role', 'listitem');
+  card.setAttribute('tabindex', '0');
+  card.setAttribute('aria-grabbed', 'false');
+  card.setAttribute('aria-label', task.title);
 
   const title = document.createElement('p');
   title.className = 'card__title';
@@ -43,7 +46,6 @@ function createEmptyState() {
   const empty = document.createElement('p');
   empty.className = 'column__empty';
   empty.textContent = EMPTY_MESSAGE;
-  empty.setAttribute('aria-hidden', 'true');
   return empty;
 }
 
@@ -75,20 +77,4 @@ export function renderCards(container, tasks) {
 export function appendCard(container, task, { animate = false } = {}) {
   container.querySelector('.column__empty')?.remove();
   container.appendChild(createCardElement(task, { animate }));
-}
-
-/**
- * Removes a card element from the DOM.
- * @param {string} taskId - Unique identifier of the task to remove.
- * @returns {boolean} Whether a matching card was found and removed.
- */
-export function removeCard(taskId) {
-  const card = document.querySelector(`.card[data-id="${taskId}"]`);
-
-  if (!card) {
-    return false;
-  }
-
-  card.remove();
-  return true;
 }
