@@ -12,11 +12,11 @@ Built for **HackWeek 2026**.
 
 ### Empty Board
 
-![Empty Board](assets/screenshot-desktop1.png)
+![Empty Board](assets/screenshot/desktop1.png)
 
 ### Board with Tasks
 
-![Board with Tasks](assets/screenshot-desktop2.png)
+![Board with Tasks](assets/screenshot/desktop2.png)
 
 ---
 
